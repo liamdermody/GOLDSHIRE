@@ -22,6 +22,7 @@ export default function BTCChart() {
   const [rangeYears, setRangeYears] = useState(10);
 
   useEffect(() => {
+    console.log("[BTCChart] mount rangeYears=", rangeYears);
     const el = boxRef.current;
     if (!el) return;
 
@@ -33,10 +34,7 @@ export default function BTCChart() {
         textColor: document.documentElement.classList.contains("dark") ? "#e5e7eb" : "#0f172a",
       },
       rightPriceScale: { borderVisible: false },
-      timeScale: {
-        borderVisible: false,
-        rightBarStaysOnScroll: true,
-      },
+      timeScale: { borderVisible: false, rightBarStaysOnScroll: true },
       grid: {
         vertLines: { color: "rgba(128,128,128,0.1)" },
         horzLines: { color: "rgba(128,128,128,0.1)" },
@@ -56,9 +54,8 @@ export default function BTCChart() {
 
     const MIN_WINDOW = YEARS(1) / 1000;
     const clampToMin = (tr) => {
-      if (!tr?.from || !tr?.to) return;
-      const span = tr.to - tr.from;
-      if (span < MIN_WINDOW) {
+      const span = (tr?.to ?? 0) - (tr?.from ?? 0);
+      if (span && span < MIN_WINDOW) {
         const to = tr.to;
         chart.timeScale().setVisibleRange({ from: to - MIN_WINDOW, to });
       }
@@ -137,9 +134,7 @@ export default function BTCChart() {
         </div>
       </div>
       <div ref={boxRef} className="w-full rounded-2xl border overflow-hidden" />
-      <p className="text-xs text-muted-foreground">
-        Live daily data from CoinCap. Initial window: 10y. Minimum zoom enforced: 1y.
-      </p>
+      <p className="text-xs text-muted-foreground">Live daily data from CoinCap. Initial window: 10y. Minimum zoom: 1y.</p>
     </div>
   );
 }

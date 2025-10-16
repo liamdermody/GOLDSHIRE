@@ -2,33 +2,19 @@ import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Routes, Route, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck, LineChart, Coins, Phone, FileText, HelpCircle, Home as HomeIcon, CheckCircle2, XCircle, Sun, Moon, Menu } from "lucide-react";
+import BTCChart from "./components/BTCChart.jsx";
 
 function Button({ children, className = "", variant, ...props }) {
   const base = variant === "outline"
     ? "border px-4 py-2 rounded"
     : "px-4 py-2 rounded bg-black text-white dark:bg-white dark:text-black";
-  return (
-    <button {...props} className={`${base} ${className}`.trim()}>
-      {children}
-    </button>
-  );
+  return <button {...props} className={`${base} ${className}`.trim()}>{children}</button>;
 }
-function Card({ children, className = "" }) {
-  return <div className={`border rounded-xl ${className}`.trim()}>{children}</div>;
-}
-function CardHeader({ children, className = "" }) {
-  return <div className={`p-4 border-b ${className}`.trim()}>{children}</div>;
-}
-function CardTitle({ children, className = "" }) {
-  return <h2 className={`font-semibold ${className}`.trim()}>{children}</h2>;
-}
-function CardContent({ children, className = "" }) {
-  return <div className={`p-4 ${className}`.trim()}>{children}</div>;
-}
-
-function Container({ children }) {
-  return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>;
-}
+function Card({ children, className = "" }) { return <div className={`border rounded-xl ${className}`.trim()}>{children}</div>; }
+function CardHeader({ children, className = "" }) { return <div className={`p-4 border-b ${className}`.trim()}>{children}</div>; }
+function CardTitle({ children, className = "" }) { return <h2 className={`font-semibold ${className}`.trim()}>{children}</h2>; }
+function CardContent({ children, className = "" }) { return <div className={`p-4 ${className}`.trim()}>{children}</div>; }
+function Container({ children }) { return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>; }
 
 function ThemeToggle() {
   const [dark, setDark] = useState(() => {
@@ -38,13 +24,8 @@ function ThemeToggle() {
   });
   useEffect(() => {
     const root = document.documentElement;
-    if (dark) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    if (dark) { root.classList.add("dark"); localStorage.setItem("theme","dark"); }
+    else { root.classList.remove("dark"); localStorage.setItem("theme","light"); }
   }, [dark]);
   return (
     <Button variant="outline" className="rounded-xl" onClick={() => setDark(d => !d)} aria-label="Toggle theme">
@@ -162,19 +143,13 @@ function Hero() {
             Dual-collateral mortgages secured by BTC and property equity, with transparent risk controls and research-first underwriting.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <NavLink to="/products">
-              <Button className="rounded-2xl">Explore Products <ArrowRight className="ml-2 h-4 w-4"/></Button>
-            </NavLink>
-            <NavLink to="/research">
-              <Button variant="outline" className="rounded-2xl">Read Research</Button>
-            </NavLink>
+            <NavLink to="/products"><Button className="rounded-2xl">Explore Products <ArrowRight className="ml-2 h-4 w-4"/></Button></NavLink>
+            <NavLink to="/research"><Button variant="outline" className="rounded-2xl">Read Research</Button></NavLink>
           </div>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
           <Card className="rounded-2xl shadow-xl">
-            <CardHeader>
-              <CardTitle>Risk Controls at a Glance</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle>Risk Controls at a Glance</CardTitle></CardHeader>
             <CardContent>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-3"><ShieldCheck className="mt-0.5 h-4 w-4"/> LTV bands with automated alerts and staged remediation.</li>
@@ -206,9 +181,7 @@ function HomePage() {
                 <div className="flex items-center gap-2 text-primary">{f.icon}<span className="text-sm font-medium">{f.title}</span></div>
                 <CardTitle className="text-xl">{f.title}</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{f.body}</p>
-              </CardContent>
+              <CardContent><p className="text-sm text-muted-foreground">{f.body}</p></CardContent>
             </Card>
           ))}
         </div>
@@ -218,9 +191,7 @@ function HomePage() {
               <p className="text-sm uppercase tracking-wider text-muted-foreground">Pilot Program</p>
               <h3 className="mt-2 text-2xl font-semibold">Seeking first 10 borrowers + design partners</h3>
               <p className="mt-2 text-muted-foreground">If you are a qualified BTC holder with property equity, join our pilot.</p>
-              <div className="mt-5">
-                <NavLink to="/contact"><Button className="rounded-2xl">Apply to Pilot</Button></NavLink>
-              </div>
+              <div className="mt-5"><NavLink to="/contact"><Button className="rounded-2xl">Apply to Pilot</Button></NavLink></div>
             </CardContent>
           </Card>
         </div>
@@ -258,15 +229,11 @@ function ProductsPage() {
                 <span className="text-xs rounded-full px-2 py-1 bg-muted">{p.tag}</span>
               </div>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">{p.detail}</p>
-            </CardContent>
+            <CardContent><p className="text-sm text-muted-foreground">{p.detail}</p></CardContent>
           </Card>
         ))}
       </div>
-      <div className="mt-8">
-        <NavLink to="/contact"><Button className="rounded-2xl">Inquire</Button></NavLink>
-      </div>
+      <div className="mt-8"><NavLink to="/contact"><Button className="rounded-2xl">Inquire</Button></NavLink></div>
     </Section>
   );
 }
@@ -282,17 +249,16 @@ function ResearchPage() {
       <div className="grid gap-6 md:grid-cols-2">
         {items.map((it, i) => (
           <Card key={i} className="rounded-2xl">
-            <CardHeader>
-              <CardTitle className="text-xl">{it.title}</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle className="text-xl">{it.title}</CardTitle></CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">{it.desc}</p>
-              <div className="mt-4">
-                <a href={it.href} className="text-sm underline">View</a>
-              </div>
+              <div className="mt-4"><a href={it.href} className="text-sm underline">View</a></div>
             </CardContent>
           </Card>
         ))}
+      </div>
+      <div className="mt-8">
+        <BTCChart />
       </div>
     </Section>
   );
@@ -302,12 +268,8 @@ function AboutPage() {
   return (
     <Section title="About" lead="We’re builders, operators, and BTC long-termists designing conservative credit for a volatile asset.">
       <div className="prose prose-neutral max-w-none">
-        <p>
-          Goldshire aims to operate as a lean Delaware C-Corp with custody/BaaS partners, then pursue a Wyoming SPDI trust charter, and later register as a foreign entity in New Jersey. Long-term, we intend to run as a trust company in NJ with a Wyoming regulatory base.
-        </p>
-        <p>
-          Our philosophy: simple products, explicit risks, no hype. If the numbers don’t pencil, we don’t ship.
-        </p>
+        <p>Goldshire aims to operate as a lean Delaware C-Corp with custody/BaaS partners, then pursue a Wyoming SPDI trust charter, and later register as a foreign entity in New Jersey. Long-term, we intend to run as a trust company in NJ with a Wyoming regulatory base.</p>
+        <p>Our philosophy: simple products, explicit risks, no hype. If the numbers don’t pencil, we don’t ship.</p>
       </div>
     </Section>
   );
@@ -324,12 +286,8 @@ function FAQPage() {
       <div className="space-y-4">
         {faqs.map((f, i) => (
           <Card key={i} className="rounded-2xl">
-            <CardHeader>
-              <CardTitle className="text-base">{f.q}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">{f.a}</p>
-            </CardContent>
+            <CardHeader><CardTitle className="text-base">{f.q}</CardTitle></CardHeader>
+            <CardContent><p className="text-sm text-muted-foreground">{f.a}</p></CardContent>
           </Card>
         ))}
       </div>
@@ -382,59 +340,6 @@ function TestsPage() {
   );
 }
 
-function ContactPage() {
-  const [status, setStatus] = useState("idle");
-  async function submit(e) {
-    e.preventDefault();
-    setStatus("sending");
-    const form = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(form.entries());
-    try {
-      const res = await fetch("https://formspree.io/f/xyylvzyl", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) setStatus("sent"); else setStatus("error");
-    } catch { setStatus("error"); }
-  }
-  return (
-    <Section title="Contact" lead="Tell us a bit about your situation and we’ll get back to you.">
-      <Card className="rounded-2xl max-w-2xl">
-        <CardContent className="pt-6">
-          <form className="grid gap-4" onSubmit={submit}>
-            <div>
-              <label className="text-sm">Name</label>
-              <input name="name" className="mt-1 w-full rounded-xl border p-2 bg-background text-foreground" placeholder="Satoshi Nakamoto" required />
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm">Email</label>
-                <input name="email" type="email" className="mt-1 w-full rounded-xl border p-2 bg-background text-foreground" placeholder="you@example.com" required />
-              </div>
-              <div>
-                <label className="text-sm">Subject</label>
-                <input name="subject" className="mt-1 w-full rounded-xl border p-2 bg-background text-foreground" placeholder="Pilot Program / General" />
-              </div>
-            </div>
-            <div>
-              <label className="text-sm">Message</label>
-              <textarea name="message" className="mt-1 w-full rounded-xl border p-2 h-32 bg-background text-foreground" placeholder="Tell us about your BTC, property, and goals." required />
-            </div>
-            <div className="flex items-center gap-3">
-              <Button type="submit" disabled={status==="sending"} className="rounded-2xl w-fit">
-                {status==="sending" ? "Sending..." : status==="sent" ? "Sent" : "Send"}
-              </Button>
-              {status==="error" && <span className="text-sm text-red-600">Error sending. Try again.</span>}
-            </div>
-            <p className="text-xs text-muted-foreground">Powered by Formspree (replace with your endpoint later).</p>
-          </form>
-        </CardContent>
-      </Card>
-    </Section>
-  );
-}
-
 export default function App() {
   return (
     <Router>
@@ -449,11 +354,7 @@ export default function App() {
           <Route path="/disclosures" element={<DisclosuresPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/_tests" element={<TestsPage />} />
-          <Route path="*" element={
-            <Section title="Not Found">
-              <p className="text-muted-foreground">The page you’re looking for doesn’t exist.</p>
-            </Section>
-          }/>
+          <Route path="*" element={<Section title="Not Found"><p className="text-muted-foreground">The page you’re looking for doesn’t exist.</p></Section>} />
         </Routes>
         <Footer />
       </div>
