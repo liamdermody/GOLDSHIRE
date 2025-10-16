@@ -385,3 +385,21 @@ export default function App() {
     </Router>
   );
 }
+// src/App.jsx
+import React from 'react'
+
+// If you already have src/card.jsx, this will render it.
+// If not, comment the next line until you add it.
+import Card from './card.jsx'
+
+export default function App() {
+  return (
+    <main style={{ padding: 24, maxWidth: 900, margin: '0 auto' }}>
+      <h1>Goldshire Financial</h1>
+      <p>Vite + React deployed on GitHub Pages.</p>
+      <div style={{ marginTop: 16 }}>
+        <Card />
+      </div>
+    </main>
+  )
+}
