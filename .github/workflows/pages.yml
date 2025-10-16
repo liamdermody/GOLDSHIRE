@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run build --logLevel info
+        run: npm run build
       - name: Copy CNAME into dist
         if: hashFiles('CNAME') != ''
         run: cp CNAME dist/CNAME
