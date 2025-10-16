@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Routes, Route, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck, LineChart, Coins, Phone, FileText, HelpCircle, Home as HomeIcon, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowRight, ShieldCheck, LineChart, Coins, Phone, FileText, HelpCircle, Home as HomeIcon, CheckCircle2, XCircle, Sun, Moon, Menu } from "lucide-react";
 
-// ---- Minimal UI (in-file stubs to avoid missing imports) ----
 function Button({ children, className = "", variant, ...props }) {
   const base = variant === "outline"
     ? "border px-4 py-2 rounded"
-    : "px-4 py-2 rounded bg-black text-white";
+    : "px-4 py-2 rounded bg-black text-white dark:bg-white dark:text-black";
   return (
     <button {...props} className={`${base} ${className}`.trim()}>
       {children}
@@ -27,15 +26,37 @@ function CardContent({ children, className = "" }) {
   return <div className={`p-4 ${className}`.trim()}>{children}</div>;
 }
 
-// ---- Shared Layout ----
 function Container({ children }) {
   return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>;
+}
+
+function ThemeToggle() {
+  const [dark, setDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) return saved === "dark";
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+  useEffect(() => {
+    const root = document.documentElement;
+    if (dark) {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [dark]);
+  return (
+    <Button variant="outline" className="rounded-xl" onClick={() => setDark(d => !d)} aria-label="Toggle theme">
+      {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </Button>
+  );
 }
 
 function Logo() {
   return (
     <NavLink to="/" className="flex items-center gap-2 font-semibold">
-      <div className="h-9 w-9 rounded-2xl bg-black text-white grid place-items-center shadow-md">GF</div>
+      <div className="h-9 w-9 rounded-2xl bg-black text-white dark:bg-white dark:text-black grid place-items-center shadow-md">GF</div>
       <span className="text-lg">Goldshire Financial</span>
     </NavLink>
   );
@@ -43,23 +64,48 @@ function Logo() {
 
 function NavBar() {
   const linkBase = "px-3 py-2 rounded-xl text-sm font-medium transition hover:bg-muted";
-  const active = ({ isActive }) =>
-    isActive ? `${linkBase} bg-muted` : linkBase;
+  const active = ({ isActive }) => (isActive ? `${linkBase} bg-muted` : linkBase);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const close = () => setOpen(false);
+    window.addEventListener("hashchange", close);
+    return () => window.removeEventListener("hashchange", close);
+  }, []);
   return (
     <div className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur">
       <Container>
         <div className="flex h-16 items-center justify-between">
           <Logo />
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             <NavLink to="/" className={active} end><HomeIcon className="mr-2 h-4 w-4"/>Home</NavLink>
             <NavLink to="/products" className={active}><Coins className="mr-2 h-4 w-4"/>Products</NavLink>
             <NavLink to="/research" className={active}><LineChart className="mr-2 h-4 w-4"/>Research</NavLink>
             <NavLink to="/about" className={active}><ShieldCheck className="mr-2 h-4 w-4"/>About</NavLink>
             <NavLink to="/faq" className={active}><HelpCircle className="mr-2 h-4 w-4"/>FAQ</NavLink>
             <NavLink to="/disclosures" className={active}><FileText className="mr-2 h-4 w-4"/>Disclosures</NavLink>
-            <NavLink to="/contact" className="ml-2 px-3 py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90"><Phone className="mr-2 h-4 w-4"/>Contact</NavLink>
+            <NavLink to="/contact" className="ml-1 px-3 py-2 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90"><Phone className="mr-2 h-4 w-4"/>Contact</NavLink>
+            <ThemeToggle />
           </nav>
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
+            <Button variant="outline" className="rounded-xl" onClick={() => setOpen(o => !o)} aria-label="Menu">
+              <Menu className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
+        {open && (
+          <div className="md:hidden pb-3">
+            <div className="grid gap-1">
+              <NavLink to="/" className={active} end>Home</NavLink>
+              <NavLink to="/products" className={active}>Products</NavLink>
+              <NavLink to="/research" className={active}>Research</NavLink>
+              <NavLink to="/about" className={active}>About</NavLink>
+              <NavLink to="/faq" className={active}>FAQ</NavLink>
+              <NavLink to="/disclosures" className={active}>Disclosures</NavLink>
+              <NavLink to="/contact" className={`${linkBase} bg-primary text-primary-foreground`}>Contact</NavLink>
+            </div>
+          </div>
+        )}
       </Container>
     </div>
   );
@@ -104,7 +150,6 @@ function Footer() {
   );
 }
 
-// ---- Pages ----
 function Hero() {
   return (
     <Container>
@@ -308,28 +353,20 @@ function DisclosuresPage() {
   );
 }
 
-// ---- Lightweight UI self-tests (runtime) ----
 function TestsPage() {
   const tests = [];
-
   const disclosuresItems = [
     "Educational content only; not investment, legal, or tax advice.",
     "Products described may be prototypes or pending regulatory approval.",
     "BTC is volatile. Borrowing against BTC can result in loss of collateral.",
   ];
   tests.push({ name: "Disclosures length is 3", pass: disclosuresItems.length === 3 });
-
   const requiredRoutes = ["/", "/products", "/research", "/about", "/faq", "/disclosures", "/contact", "/_tests"];
   tests.push({ name: "Has 8 routes including tests", pass: requiredRoutes.length === 8 });
-
   tests.push({ name: "UI Button defined", pass: typeof Button === "function" });
   tests.push({ name: "UI Card defined", pass: typeof Card === "function" });
   tests.push({ name: "Logo label present", pass: "Goldshire Financial".length > 0 });
-
-  useEffect(() => {
-    console.assert(disclosuresItems.length === 3, "Disclosures should have 3 items");
-  }, []);
-
+  useEffect(() => { console.assert(disclosuresItems.length === 3, "Disclosures should have 3 items"); }, []);
   return (
     <Section title="Self-Tests" lead="Runtime checks to quickly validate the UI wiring.">
       <div className="space-y-2">
@@ -346,31 +383,51 @@ function TestsPage() {
 }
 
 function ContactPage() {
+  const [status, setStatus] = useState("idle");
+  async function submit(e) {
+    e.preventDefault();
+    setStatus("sending");
+    const form = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(form.entries());
+    try {
+      const res = await fetch("https://formspree.io/f/xyylvzyl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) setStatus("sent"); else setStatus("error");
+    } catch { setStatus("error"); }
+  }
   return (
     <Section title="Contact" lead="Tell us a bit about your situation and we’ll get back to you.">
       <Card className="rounded-2xl max-w-2xl">
         <CardContent className="pt-6">
-          <form className="grid gap-4">
+          <form className="grid gap-4" onSubmit={submit}>
             <div>
               <label className="text-sm">Name</label>
-              <input className="mt-1 w-full rounded-xl border p-2" placeholder="Satoshi Nakamoto" />
+              <input name="name" className="mt-1 w-full rounded-xl border p-2 bg-background text-foreground" placeholder="Satoshi Nakamoto" required />
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm">Email</label>
-                <input className="mt-1 w-full rounded-xl border p-2" placeholder="you@example.com" />
+                <input name="email" type="email" className="mt-1 w-full rounded-xl border p-2 bg-background text-foreground" placeholder="you@example.com" required />
               </div>
               <div>
                 <label className="text-sm">Subject</label>
-                <input className="mt-1 w-full rounded-xl border p-2" placeholder="Pilot Program / General" />
+                <input name="subject" className="mt-1 w-full rounded-xl border p-2 bg-background text-foreground" placeholder="Pilot Program / General" />
               </div>
             </div>
             <div>
               <label className="text-sm">Message</label>
-              <textarea className="mt-1 w-full rounded-xl border p-2 h-32" placeholder="Tell us about your BTC, property, and goals." />
+              <textarea name="message" className="mt-1 w-full rounded-xl border p-2 h-32 bg-background text-foreground" placeholder="Tell us about your BTC, property, and goals." required />
             </div>
-            <Button type="button" className="rounded-2xl w-fit">Send</Button>
-            <p className="text-xs text-muted-foreground">Form is a placeholder. Hook to your preferred form backend (e.g., GitHub Pages + Formspree).</p>
+            <div className="flex items-center gap-3">
+              <Button type="submit" disabled={status==="sending"} className="rounded-2xl w-fit">
+                {status==="sending" ? "Sending..." : status==="sent" ? "Sent" : "Send"}
+              </Button>
+              {status==="error" && <span className="text-sm text-red-600">Error sending. Try again.</span>}
+            </div>
+            <p className="text-xs text-muted-foreground">Powered by Formspree (replace with your endpoint later).</p>
           </form>
         </CardContent>
       </Card>
@@ -378,7 +435,6 @@ function ContactPage() {
   );
 }
 
-// ---- App ----
 export default function App() {
   return (
     <Router>

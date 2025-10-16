@@ -1,9 +1,7 @@
 @import "tailwindcss";
 @reference "tailwindcss";
 
-/* Map the custom utility names we used to Tailwind utilities */
 :root { color-scheme: light; }
-
 .bg-background           { @apply bg-white; }
 .text-foreground         { @apply text-slate-900; }
 .bg-muted                { @apply bg-slate-100; }
@@ -11,8 +9,15 @@
 .bg-primary              { @apply bg-neutral-900; }
 .text-primary-foreground { @apply text-white; }
 
-/* Nicer defaults */
+:root.dark { color-scheme: dark; }
+.dark .bg-background           { @apply bg-slate-900; }
+.dark .text-foreground         { @apply text-slate-100; }
+.dark .bg-muted                { @apply bg-slate-800; }
+.dark .text-muted-foreground   { @apply text-slate-400; }
+.dark .bg-primary              { @apply bg-white; }
+.dark .text-primary-foreground { @apply text-black; }
+
 @layer base {
   html, body, #root { @apply h-full; }
-  body { @apply text-slate-900 bg-white antialiased; }
+  body { @apply antialiased; }
 }
