@@ -1,26 +1,19 @@
 {
-  "name": "goldshirefinancial",
+  "name": "goldshire",
   "private": true,
+  "version": "0.0.0",
   "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
   "dependencies": {
-    "framer-motion": "^11.0.0",
-    "lightweight-charts": "^5.0.9",
-    "lucide-react": "^0.441.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.30.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.14",
-    "@vitejs/plugin-react": "^4.3.0",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.14",
+    "@vitejs/plugin-react": "^4.3.1",
     "vite": "^5.4.0"
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "preview": "vite preview"
   }
 }
