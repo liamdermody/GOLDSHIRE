@@ -1,0 +1,20 @@
+#gs-btc-widget {
+  position: fixed; right: 16px; bottom: 16px; z-index: 9999;
+  background: #0e1420; color: #e7e9ee;
+  border: 1px solid #1f2a3d; border-radius: 12px;
+  padding: 10px 12px 8px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  box-shadow: 0 6px 30px rgba(0,0,0,.35);
+  min-width: 140px;
+}
+#gs-btc-widget .gsb-row { display: flex; align-items: baseline; gap: 8px; }
+#gs-btc-widget .gsb-label { font-weight: 700; letter-spacing: .4px; opacity: .9; }
+#gs-btc-widget .gsb-price { font-size: 18px; font-weight: 800; letter-spacing: .3px; }
+#gs-btc-widget .gsb-src { opacity: .55; font-size: 11px; margin-top: 6px; }
+#gs-btc-widget .gsb-dim { opacity: .7; }
+#gs-btc-widget.gsb-error { border-color: #5d1d1d; }
+#gs-btc-widget .gsb-refresh {
+  position: absolute; right: 6px; top: 6px; border: 0; border-radius: 8px;
+  background: #5aa6ff; color: #041023; cursor: pointer; font-weight: 700; width: 26px; height: 22px;
+}
+#gs-btc-widget .gsb-refresh:hover { filter: brightness(1.1); }
+@media (max-width: 520px) { #gs-btc-widget { right: 10px; bottom: 10px; } }
