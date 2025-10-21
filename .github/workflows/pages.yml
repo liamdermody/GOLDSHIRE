@@ -1,14 +1,7 @@
 name: Deploy Vite to GitHub Pages
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'src/**'
-      - 'public/**'
-      - 'index.html'
-      - 'vite.config.js'
-      - 'package.json'
-      - '.github/workflows/pages.yml'
+    branches: [ live ]      # <<< deploys only from the live branch
   workflow_dispatch:
 
 permissions:
@@ -22,6 +15,7 @@ concurrency:
 
 jobs:
   build:
+    # still require explicit intent in the commit message
     if: contains(github.event.head_commit.message, '[deploy]')
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +30,8 @@ jobs:
         run: cp CNAME dist/CNAME
       - run: cp dist/index.html dist/404.html
       - uses: actions/upload-pages-artifact@v3
-        with: { path: dist }
+        with:
+          path: dist
   deploy:
     needs: build
     runs-on: ubuntu-latest
