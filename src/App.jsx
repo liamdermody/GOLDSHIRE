@@ -34,9 +34,15 @@ function Container({ children }) {
 
 function Logo() {
   return (
-    <NavLink to="/" className="flex items-center gap-2 font-semibold">
-      <div className="h-9 w-9 rounded-2xl bg-black text-white grid place-items-center shadow-md">GF</div>
-      <span className="text-lg">Goldshire Financial</span>
+    <NavLink to="/" className="flex items-center gap-3">
+      <img
+        src={goldshireLogo}
+        alt="Goldshire"
+        className="h-9 w-auto"
+      />
+      <span className="text-lg tracking-wide font-semibold">
+        GOLDSHIRE
+      </span>
     </NavLink>
   );
 }
@@ -111,17 +117,17 @@ function Hero() {
       <div className="grid items-center gap-10 py-16 md:grid-cols-2">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h1 className="text-4xl md:text-5xl font-semibold leading-tight">
-            Turn Bitcoin into <span className="underline decoration-primary/60">Real-World Ownership</span>
+            Bitcoin-Native <span className="underline decoration-primary/60">Private Equity</span>
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Dual-collateral mortgages secured by BTC and property equity, with transparent risk controls and research-first underwriting.
+            Goldshire acquires simple, cash-flowing industrial businesses while running a conservative Bitcoin treasury and trust structure.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <NavLink to="/products">
-              <Button className="rounded-2xl">Explore Products <ArrowRight className="ml-2 h-4 w-4"/></Button>
+              <Button className="rounded-2xl">Explore Our Strategy</Button>
             </NavLink>
-            <NavLink to="/research">
-              <Button variant="outline" className="rounded-2xl">Read Research</Button>
+            <NavLink to="/contact">
+              <Button variant="outline" className="rounded-2xl">Talk With Us</Button>
             </NavLink>
           </div>
         </motion.div>
